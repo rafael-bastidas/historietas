@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "historietas",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
