@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar style="--color: darkblue;">
+    <ion-buttons slot="start">
+      <ion-button routerLink="">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title slot="end">Comics y Mangas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: rgba(0, 51, 153, 1);--padding-start:10px;--padding-end:10px;">
+  <div id="container">
+
+  
+  <ion-text color="light">
+    <p>
+      Disfruta del mejor lector de historietas, comics y mangas, puedes llevar un seguimiento de tus lecturas y mas; Registrate o Ingresa...
+    </p>
+  </ion-text>
+  <section style="background: rgba(255, 255, 255, 0.87);padding: 15px;" *ngIf="userActivo===null">
+    <ion-item>
+      <ion-label position="floating">Usuario</ion-label>
+      <ion-input [formControl]="usuario"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input [formControl]="contrasena" type="password"></ion-input>
+    </ion-item>
+    <section style="text-align: center; padding-top: 10px;">
+      <ion-button size="small" (click)="ingresar()">
+        Ingresar
+      </ion-button>
+      <ion-button size="small" (click)="registrar()">
+        Registrar
+      </ion-button>
+    </section>
+  </section>
+  <section style="background: rgba(255, 255, 255, 0.87);padding: 15px;" *ngIf="userActivo!==null">
+    <ion-button size="small" (click)="cerrarSession()">
+      Cerrar sesion
+    </ion-button>
+  </section>
+  <ion-img src="/assets/borrar-2.png"></ion-img>
+
+</div>
+</ion-content>

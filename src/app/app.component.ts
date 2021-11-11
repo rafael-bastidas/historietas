@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { DataInternaService } from './services/data-interna.service';
 
 @Component({
   selector: 'app-root',

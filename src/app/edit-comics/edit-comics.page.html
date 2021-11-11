@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar style="--color: darkblue;">
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon slot="start" name="person-circle-outline"></ion-icon>
+        {{user}}
+      </ion-button>
+    </ion-buttons>
+    <ion-title slot="end">Comics y Mangas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--padding-top:10px;--padding-bottom:20px;--padding-start:10px;--padding-end:10px;--background: rgba(0, 51, 153, 1);">
+
+  <ion-toolbar style="--background:transparent; --color: white;">
+    <ion-buttons slot="start">
+      <ion-button routerLink="">
+        <ion-icon slot="start" name="arrow-back-outline"></ion-icon>Atras
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="saveChanges()">
+        <ion-icon slot="start" name="save-outline"></ion-icon>Guardar cambios
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-item>
+    <ion-label position="floating" color="primary">Titulo</ion-label>
+    <ion-input [formControl]="title"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating" color="primary">Descripción</ion-label>
+    <ion-textarea [formControl]="description"></ion-textarea>
+  </ion-item>
+  
+  <ion-button (click)="file.click()" size="small" expand="full">
+    <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>Subir img. portada
+  </ion-button>
+  <input (change)="onFileChange($event)" #file type="file" accept="image/*" style="width: 0px; height: 0px;"/>
+
+  <ion-item>
+    <ion-label color="primary">+ Agregar episodio</ion-label>
+    <ion-select placeholder="Seleccione" [formControl]="episodeSelect">
+      <ion-select-option *ngFor="let episode of episodes" [value]="episode.value">{{episode.label}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <section *ngIf="flatEpisode" style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+    <ion-text color="primary">
+      Episodio #{{episodeSelect.value}}
+    </ion-text>
+    <ion-button (click)="files.click()" size="small" color="success">
+      + Fotogramas
+    </ion-button>
+    <input (change)="onFilesChange($event)" #files multiple type="file" accept="image/*" style="width: 0px; height: 0px;"/>
+  </section>
+
+  <ion-slides *ngIf="flatEpisode" [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }">
+    <ion-slide *ngFor="let card of fotogramas" style="width: 150px; height: auto; margin-left: 5px; cursor: pointer;">
+      <ion-col style="background: white; padding: 0px; height: 100%;">
+        <section (click)="verFotograma(card.id)">
+          <ion-img style="pointer-events:none" [src]="card.url"></ion-img>
+          <ion-label style="position: absolute; top: 0px; right: 0px; background: white; padding: 8px; color: darkblue;">{{ card.title }}</ion-label>
+        </section>
+        <section *ngIf="card.id!==0">
+          <ion-button (click)="editFotograma(card.id)" size="small" color="success">
+            <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+          </ion-button>
+          <ion-button (click)="deleteFotograma(card.id)" size="small" color="danger">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </section>
+      </ion-col>
+    </ion-slide>
+  </ion-slides>
+
+</ion-content>
