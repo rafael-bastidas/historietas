@@ -17,7 +17,8 @@ export class EditComicsPage implements OnInit {
   description:FormControl = new FormControl('');
   episodeSelect:FormControl = new FormControl('');
   flatEpisode:boolean = false;
-
+  nickName:string = 'Invitado';
+  id_user:string = '-1';
   file_imgportada = "";
   file_imgfotogramas = "";
 
@@ -30,6 +31,18 @@ export class EditComicsPage implements OnInit {
       this.cargarInputs();
     }
     this.episodeSelect.valueChanges.subscribe(item => this.saveEpisodes(item));
+  }
+  ionViewWillEnter(){
+    this.verificarProfile();
+  }
+  verificarProfile(){
+    if (localStorage.getItem('user')!==null){
+      localStorage.getItem('user')!=='Invitado'?this.nickName = localStorage.getItem('user'):'';
+      localStorage.getItem('id_user')!=='-1'?this.id_user = localStorage.getItem('id_user'):'';
+    } else if (localStorage.getItem('user')===null) {
+      this.nickName = 'Invitado'
+      this.id_user = '-1'
+    }
   }
   verFotograma(numberFotograma){
     console.log('ver',numberFotograma);

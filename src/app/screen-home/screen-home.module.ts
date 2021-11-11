@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { ScreenHomePageRoutingModule } from './screen-home-routing.module';
 
 import { ScreenHomePage } from './screen-home.page';
-import { DataInternaService } from '../services/data-interna.service';
 
 @NgModule({
   imports: [
@@ -17,8 +16,6 @@ import { DataInternaService } from '../services/data-interna.service';
     ScreenHomePageRoutingModule
   ],
   declarations: [ScreenHomePage],
-  providers:[
-    
-  ]
+  providers:[ ]
 })
 export class ScreenHomePageModule {}
