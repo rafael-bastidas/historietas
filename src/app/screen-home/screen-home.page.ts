@@ -11,28 +11,9 @@ export class ScreenHomePage implements OnInit {
 
   nickName:string = 'Invitado';
   id_user:string = '-1';
-  mySeries:any = [
-    {id:0,title:'Nueva serie',url:'https://otakuteca.com/images/books/cover/5e3417c450a2b.jpg'},
-    {id:1,title:'El chavo 2',url:'https://otakuteca.com/images/books/cover/5f07608bdd5b1.jpg'},
-    {id:2,title:'El chavo 3',url:'https://otakuteca.com/images/books/cover/613138f8298fd.jpg'}
-  ];
-  seriesFollow:any = [{id:1,title:'El chavo',url:'https://otakuteca.com/images/books/cover/5c9011191e83d.jpg'}];
-  users:any = [
-    {
-      nickName:'don_quijote',
-      series:[
-        {id:1,title:'Locls',url:'https://otakuteca.com/images/books/cover/6119e410d98fd.jpg'},
-        {id:1,title:'Trocha',url:'https://otakuteca.com/images/books/cover/5e3417c450a2b.jpg'}
-      ]
-    },
-    {
-      nickName:'pancho',
-      series:[
-        {id:1,title:'Patric El lanzador cobarde',url:'https://otakuteca.com/images/books/cover/60592a95d9de9.jpg'},
-        {id:1,title:'Rations',url:'https://otakuteca.com/images/books/cover/5c2efcd42cd5e.jpg'}
-      ]
-    }
-  ];
+  mySeries:any = [{id_serie:0,titulo:'Nueva serie',descripcion:'',imgportada:''}];
+  seriesFollow:any = [];
+  users:any = [];
 
   constructor(private router:Router, private route:ActivatedRoute, private comBackend:ConnectionBackendService) { }
 
@@ -49,16 +30,35 @@ export class ScreenHomePage implements OnInit {
     formData.append('params','GET-INIT');
     formData.append('data',JSON.stringify({id_user:this.id_user}));
     let {response} = await this.comBackend.requestBackend(formData);
-    //this.mySeries = response.myseries;
-    //this.seriesFollow = response.mysuscribe;
-    //this.allseries = response.series;
+    for (let index = 0; index < response.myseries.length; index++) {
+      const element = response.myseries[index];
+      this.mySeries.push(element);
+    }
+    this.seriesFollow = response.mysuscribe;
+    let series=[];
+    for (let index = 0; index < response.series.length; index++) {
+      const element = response.series[index];
+      const elementBack = index !== 0 ? response.series[index-1] : response.series[index];
+      
+      series.push({id_serie:element.id_serie, titulo:element.titulo, descripcion:element.descripcion, imgportada:element.imgportada});
+      if (element.id_user !== elementBack.id_user){
+        this.users.push({id_user:elementBack.id_user, nickname:elementBack.nickname, series:series});
+        series = [];
+      } else if (element.id_user === elementBack.id_user && index+1 === response.series.length) {
+        this.users.push({id_user:elementBack.id_user, nickname:elementBack.nickname, series:series});
+      } else if (element.id_user !== elementBack.id_user && index+1 === response.series.length) {
+        this.users.push({id_user:element.id_user, nickname:element.nickname, series:[
+          {id_serie:element.id_serie, titulo:element.titulo, descripcion:element.descripcion, imgportada:element.imgportada}
+        ]});
+      }
+    }console.log(this.users);
   }
   verSerie(numberCard:number){
     if(numberCard===0){
-      this.router.navigate(['/edit-comics'], {queryParams: {id_user: '1', id_serie: '1'}});
+      this.router.navigate(['/edit-comics'], {queryParams: {id_serie: numberCard}});
     } else {
       console.log('ver',numberCard);
-      this.router.navigate(['/pre-view-comics'], {queryParams: {id_user: '1', id_serie: '1'}})
+      this.router.navigate(['/pre-view-comics'], {queryParams: {id_serie: numberCard}})
     }
   }
   editSerie(numberCard:number){

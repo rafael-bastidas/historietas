@@ -16,46 +16,80 @@
     <h2>Mis series</h2>
   </ion-text>
   <ion-slides [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }" *ngIf="nickName!=='Invitado'">
-    <ion-slide *ngFor="let mySerie of mySeries" style="margin-left: 5px; width: 150px; height: auto; cursor: pointer;">
-      <ion-col style="background: white; padding: 0px; height: 100%;">
-        <section (click)="verSerie(mySerie.id)">
-          <ion-img *ngIf="mySerie.id!==0" style="pointer-events:none" [src]="mySerie.url"></ion-img>
-          <ion-label color="primary" [style]="mySerie.id===0?'position: absolute; top: 50%; right: 20%; height:100%;':''">{{ mySerie.title }}</ion-label>
-        </section>
-        <section *ngIf="mySerie.id!==0">
-          <ion-button (click)="editSerie(mySerie.id)" size="small" color="success">
+    <ion-slide *ngFor="let mySerie of mySeries" style="margin-left: 5px; width: 250px; height: auto; cursor: pointer;">
+      
+      <ion-card style="height: 100%; width: 100%;" *ngIf="mySerie.id_serie!==0">
+        <img [src]="mySerie.imgportada"/>
+        <ion-card-header class="contenedor-puntillos">
+          <ion-card-subtitle class="puntillos" color="primary" style="white-space:nowrap;">
+            {{ mySerie.titulo }}
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content style="position: absolute; top: 0px; right: 0px;">
+          <ion-button (click)="verSerie(mySerie.id_serie)" size="small" color="primary">
+            <ion-icon slot="icon-only" name="eye-outline"></ion-icon>
+          </ion-button>
+          <ion-button (click)="editSerie(mySerie.id_serie)" size="small" color="success">
             <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
           </ion-button>
-          <ion-button (click)="deleteSerie(mySerie.id)" size="small" color="danger">
+          <ion-button (click)="deleteSerie(mySerie.id_serie)" size="small" color="danger">
             <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
           </ion-button>
-        </section>
-      </ion-col>
+        </ion-card-content>
+      </ion-card>
+      <ion-card *ngIf="mySerie.id_serie===0" style="height: 100%; display: flex; align-items: center;">
+        <ion-card-content>
+          <ion-button size="large" color="success">
+            Nueva serie
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+
     </ion-slide>
   </ion-slides>
 
-  <ion-text color="light" *ngIf="nickName!=='Invitado'">
+  <ion-text color="light" *ngIf="nickName!=='Invitado'? seriesFollow.length!==0 : false">
     <h2>Series suscritas</h2>
   </ion-text>
-  <ion-slides [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }" *ngIf="nickName!=='Invitado'">
-    <ion-slide *ngFor="let serieFollow of seriesFollow" style="margin-left: 5px; width: 150px; height: auto; cursor: pointer;">
+  <ion-slides [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }" *ngIf="nickName!=='Invitado'? seriesFollow.length!==0 : false">
+    <ion-slide *ngFor="let serieFollow of seriesFollow" style="margin-left: 5px; width: 250px; height: auto; cursor: pointer;">
+      
+      <ion-card (click)="verSerie(serieFollow.id_serie)" style="height: 100%; width: 100%;">
+        <img [src]="serieFollow.imgportada"/>
+        <ion-card-header class="contenedor-puntillos">
+          <ion-card-subtitle class="puntillos" color="primary" style="white-space:nowrap;">
+            {{ serieFollow.titulo }}
+          </ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+      <!-- Codigo anterior
       <ion-col (click)="verSerie(serieFollow.id)" style="background: white; padding: 0px; height: 100%;">
         <ion-img style="pointer-events:none" [src]="serieFollow.url"></ion-img>
         <ion-label color="primary">{{ serieFollow.title }}</ion-label>
-      </ion-col>
+      </ion-col>-->
     </ion-slide>
   </ion-slides>
 
   <section *ngFor="let user of users">
     <ion-text color="light">
-      <h2>@{{ user.nickName }}</h2>
+      <h2>@{{ user.nickname }}</h2>
     </ion-text>
     <ion-slides [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }">
-      <ion-slide *ngFor="let serie of user.series" style="width: 150px; height: auto; margin-left: 5px; cursor: pointer;">
+      <ion-slide *ngFor="let serie of user.series" style="width: 250px; height: auto; margin-left: 5px; cursor: pointer;">
+        
+        <ion-card (click)="verSerie(serie.id_serie)" style="height: 100%; width: 100%;">
+          <img [src]="serie.imgportada"/>
+          <ion-card-header class="contenedor-puntillos">
+            <ion-card-subtitle class="puntillos" color="primary" style="white-space:nowrap;">
+              {{ serie.titulo }}
+            </ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+        <!-- Codigo Anterior
         <ion-col (click)="verSerie(serie.id)" style="background: white; padding: 0px; height: 100%;">
           <ion-img style="pointer-events:none" [src]="serie.url"></ion-img>
           <ion-label color="primary">{{ serie.title }}</ion-label>
-        </ion-col>
+        </ion-col>-->
       </ion-slide>
     </ion-slides>
   </section>

@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar style="--color: darkblue;">
     <ion-buttons slot="start">
       <ion-button [routerLink]="['/init-session']"> 
         <ion-icon slot="start" name="person-circle-outline"></ion-icon>
@@ -11,37 +11,51 @@
 </ion-header>
 
 <ion-content style="--padding-top:10px;--padding-start:10px;--padding-end:10px;">
-  <div id="container">
-  <ion-img src="/assets/borrar-1.png" style="position: absolute;top: 0px;left: 0px;"></ion-img>
-  <ion-toolbar style="--background:transparent;">
+  <ion-toolbar style="--background:transparent; --color: darkblue;">
     <ion-buttons slot="start">
-      <ion-button [routerLink]="['/']">
+      <ion-button style="--background:white" [routerLink]="['/']">
         <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon slot="icon-only" name="save-outline"></ion-icon>
+      <ion-button style="--background:white" *ngIf="suscrito==0">
+        <ion-icon slot="start" name="notifications-outline"></ion-icon>
+        Suscribir
+      </ion-button>
+      <ion-button style="--background:white" *ngIf="suscrito==1">
+        <ion-icon slot="start" name="notifications-off-outline"></ion-icon>
+        Abandonar
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+  <div id="container">
+    <ion-img [src]="serie.imgportada" style="width: 100%; position: absolute;top: 0px;left: 0px;"></ion-img>
 
-  <ion-item>
-    <ion-label>
-    <ion-button>
-      <ion-icon slot="start" name="play-circle-outline"></ion-icon>
-      El chavo 
-    </ion-button>
-    </ion-label>
-    <ion-select placeholder="Seleccione" >
-      <ion-select-option *ngFor="let episode of [{value:0,label:'Ep. 01'}]" [value]="episode.value">{{episode.label}}</ion-select-option>
-    </ion-select>
-  </ion-item>
+    <ion-item style="width: 100%;">
+      <ion-label>
+        <ion-button >
+          <ion-icon slot="start" name="book-outline"></ion-icon>
+          Leer
+        </ion-button>
+      </ion-label>
+      <ion-select placeholder="Seleccione" >
+        <ion-select-option *ngFor="let episode of [{value:0,label:'Ep. 01'}]" [value]="episode.value">{{episode.label}}</ion-select-option>
+      </ion-select>
+    </ion-item>
 
-  <ion-item style="margin-top: 10px;">
-    <ion-text color="primary" style="text-align: justify; padding:10px;">
-      Disfruta del mejor lector de historietas, comics y mangas, puedes llevar un seguimiento de tus lecturas y mas; Registrate o Ingresa...
+    <ion-card style="width: 100%;">
+      <ion-card-header>
+        <ion-card-title>{{serie.titulo}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        {{serie.descripcion}}
+      </ion-card-content>
+    </ion-card>
+    
+  </div>
+  <section style="margin-top: 15px;">
+    <ion-text>
+      <h4>Area de comentarios</h4>
     </ion-text>
-  </ion-item>
-</div>
+  </section>
 </ion-content>

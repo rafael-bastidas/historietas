@@ -1,0 +1,9 @@
+.contenedor-puntillos{
+    width: calc(100% - 5px);
+}
+.puntillos{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    /*width: calc(100% - 0px);*/
+}
