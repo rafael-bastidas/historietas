@@ -33,7 +33,7 @@ export class InitSessionPage implements OnInit {
     if (response[0].id_users > 0){
       localStorage.setItem("user",this.usuario.value);
       localStorage.setItem("id_user",response[0].id_users);
-      this.router.navigate(['/'],{queryParams:{id:1}});
+      this.router.navigate(['/']);
     } else if (response[0].id_users == -1) {
       this.presentToast('Usuario no registrado', 2000);
     } else {

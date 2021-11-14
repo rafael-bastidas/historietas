@@ -25,6 +25,7 @@ export class ScreenHomePage implements OnInit {
     this.cargarSeries();
   }
   async cargarSeries(){
+    this.initVariables();
     let formData = new FormData;
     formData.append('url','contenido');
     formData.append('params','GET-INIT');
@@ -40,10 +41,10 @@ export class ScreenHomePage implements OnInit {
       const element = response.series[index];
       const elementBack = index !== 0 ? response.series[index-1] : response.series[index];
       
-      series.push({id_serie:element.id_serie, titulo:element.titulo, descripcion:element.descripcion, imgportada:element.imgportada});
+      //series.push({id_serie:element.id_serie, titulo:element.titulo, descripcion:element.descripcion, imgportada:element.imgportada});
       if (element.id_user !== elementBack.id_user){
         this.users.push({id_user:elementBack.id_user, nickname:elementBack.nickname, series:series});
-        series = [];
+        series=[];
       } else if (element.id_user === elementBack.id_user && index+1 === response.series.length) {
         this.users.push({id_user:elementBack.id_user, nickname:elementBack.nickname, series:series});
       } else if (element.id_user !== elementBack.id_user && index+1 === response.series.length) {
@@ -51,21 +52,46 @@ export class ScreenHomePage implements OnInit {
           {id_serie:element.id_serie, titulo:element.titulo, descripcion:element.descripcion, imgportada:element.imgportada}
         ]});
       }
+      series.push({id_serie:element.id_serie, titulo:element.titulo, descripcion:element.descripcion, imgportada:element.imgportada});
     }console.log(this.users);
+  }
+  initVariables(){
+    this.mySeries = [{id_serie:0,titulo:'Nueva serie',descripcion:'',imgportada:''}];
+    this.seriesFollow = [];
+    this.users = [];
   }
   verSerie(numberCard:number){
     if(numberCard===0){
       this.router.navigate(['/edit-comics'], {queryParams: {id_serie: numberCard}});
     } else {
-      console.log('ver',numberCard);
+      console.log('ver id_serie',numberCard);
       this.router.navigate(['/pre-view-comics'], {queryParams: {id_serie: numberCard}})
     }
   }
   editSerie(numberCard:number){
-    console.log('edit',numberCard);
+    console.log('edit id_serie',numberCard);
+    this.router.navigate(['/edit-comics'], {queryParams: {id_serie: numberCard}})
   }
-  deleteSerie(numberCard:number){
+  async deleteSerie(numberCard:number){
     console.log('delete',numberCard);
+
+    let formData = new FormData;
+    formData.append('url','contenido');
+    formData.append('params','DELETE-SERIE');
+    formData.append('data',JSON.stringify({id_serie:numberCard}));
+    let { response } = await this.comBackend.requestBackend(formData);
+    if (true) {
+      let art = this.mySeries.map(serie => { return serie.id_serie !== numberCard ? 0 : 1 }).findIndex(element => element === 1);
+      this.mySeries.splice(art,1);
+
+      let index_series;
+      let index_users = this.users.map(user => {
+        index_series = user.series.map(serie => { return serie.id_serie !== numberCard ? 0 : 1 }).findIndex(element => element === 1);
+        return index_series !== -1 ? 1 : 0; 
+      }).findIndex(element => element === 1);
+      index_series = this.users[index_users].series.map(serie => { return serie.id_serie !== numberCard ? 0 : 1 }).findIndex(element => element === 1);
+      this.users[index_users].series.splice(index_series,1);
+    }  
   }
   verificarProfile(){
     if (localStorage.getItem('user')!==null){

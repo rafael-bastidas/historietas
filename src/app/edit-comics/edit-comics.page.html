@@ -34,30 +34,74 @@
     <ion-textarea [formControl]="description"></ion-textarea>
   </ion-item>
   
+  <ion-card style="width: 100%; margin-inline: 0;">
+    <ion-img [src]="url_local_imgportada[0]"></ion-img>
+    <ion-card-header>
+      <ion-card-title>Previsualizador</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Dimensiones permitidas: 300x450px
+    </ion-card-content>
+  </ion-card>
   <ion-button (click)="file.click()" size="small" expand="full">
     <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>Subir img. portada
   </ion-button>
-  <input (change)="onFileChange($event)" #file type="file" accept="image/*" style="width: 0px; height: 0px;"/>
+  <input (change)="onFileChange($event)" id="file" #file type="file" accept="image/*" style="width: 0px; height: 0px;"/>
 
   <ion-item>
     <ion-label color="primary">+ Agregar episodio</ion-label>
     <ion-select placeholder="Seleccione" [formControl]="episodeSelect">
-      <ion-select-option *ngFor="let episode of episodes" [value]="episode.value">{{episode.label}}</ion-select-option>
+      <ion-select-option value="0">Nuevo Episodio</ion-select-option>
+      <ion-select-option *ngFor="let episode of episodes" [value]="episode.id_episodio">Episodio {{episode.number_episodio}}</ion-select-option>
     </ion-select>
   </ion-item>
 
   <section *ngIf="flatEpisode" style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
     <ion-text color="primary">
-      Episodio #{{episodeSelect.value}}
+      Episodio #{{labelEpisode}}
     </ion-text>
     <ion-button (click)="files.click()" size="small" color="success">
       + Fotogramas
     </ion-button>
-    <input (change)="onFilesChange($event)" #files multiple type="file" accept="image/*" style="width: 0px; height: 0px;"/>
+    
+    <input (change)="onFilesChange($event)" id="files" #files multiple type="file" accept="image/*" style="width: 0px; height: 0px;"/>
   </section>
+<!--Codigo de previsualizacion
+  <ion-slides *ngIf="true" [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }">
+    <ion-slide *ngFor="let preview of url_local_imgfotogramas" style="width: 250px; height: auto; margin-left: 5px; cursor: pointer;">
+      <ion-card style="width: 100%; margin-inline: 0;">
+        <ion-img [src]="preview"></ion-img>
+        <ion-card-header>
+          <ion-card-title>Previsualizador</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          Dimensiones permitidas: 300x450px,  
+        </ion-card-content>
+      </ion-card>
+    </ion-slide>
+  </ion-slides>-->
 
   <ion-slides *ngIf="flatEpisode" [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }">
-    <ion-slide *ngFor="let card of fotogramas" style="width: 150px; height: auto; margin-left: 5px; cursor: pointer;">
+    <ion-slide *ngFor="let card of fotogramas" style="width: 250px; height: auto; margin-left: 5px; cursor: pointer;">
+      
+      <ion-card style="height: 100%; width: 100%;">
+        <ion-img [src]="url_local_imgfotogramas[card.number_fotograma-1]"></ion-img>
+        <ion-card-header>
+          <ion-card-subtitle color="primary">
+            Fotograma #{{ card.number_fotograma }}
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content style="position: absolute; top: 0px; right: 0px;">
+          <input (change)="onFilesOneChange($event)" id="filesOne" #filesOne type="file" accept="image/*" style="width: 0px; height: 0px;"/>
+          <ion-button (click)="editFotograma(card); filesOne.click();" size="small" color="success">
+            <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+          </ion-button>
+          <ion-button (click)="deleteFotograma(card)" size="small" color="danger">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+      <!--CODIGO ANTERIOR
       <ion-col style="background: white; padding: 0px; height: 100%;">
         <section (click)="verFotograma(card.id)">
           <ion-img style="pointer-events:none" [src]="card.url"></ion-img>
@@ -71,7 +115,7 @@
             <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
           </ion-button>
         </section>
-      </ion-col>
+      </ion-col>-->
     </ion-slide>
   </ion-slides>
 

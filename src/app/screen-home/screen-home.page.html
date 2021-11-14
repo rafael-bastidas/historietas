@@ -19,7 +19,7 @@
     <ion-slide *ngFor="let mySerie of mySeries" style="margin-left: 5px; width: 250px; height: auto; cursor: pointer;">
       
       <ion-card style="height: 100%; width: 100%;" *ngIf="mySerie.id_serie!==0">
-        <img [src]="mySerie.imgportada"/>
+        <ion-img [src]="mySerie.imgportada"></ion-img>
         <ion-card-header class="contenedor-puntillos">
           <ion-card-subtitle class="puntillos" color="primary" style="white-space:nowrap;">
             {{ mySerie.titulo }}
@@ -39,7 +39,7 @@
       </ion-card>
       <ion-card *ngIf="mySerie.id_serie===0" style="height: 100%; display: flex; align-items: center;">
         <ion-card-content>
-          <ion-button size="large" color="success">
+          <ion-button (click)="verSerie(0)" size="large" color="success">
             Nueva serie
           </ion-button>
         </ion-card-content>
