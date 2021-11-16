@@ -42,12 +42,14 @@ export class ScreenHomePage implements OnInit {
       const elementBack = index !== 0 ? response.series[index-1] : response.series[index];
       
       //series.push({id_serie:element.id_serie, titulo:element.titulo, descripcion:element.descripcion, imgportada:element.imgportada});
-      if (element.id_user !== elementBack.id_user){
+      if (element.id_user !== elementBack.id_user && index+1 !== response.series.length){
         this.users.push({id_user:elementBack.id_user, nickname:elementBack.nickname, series:series});
         series=[];
       } else if (element.id_user === elementBack.id_user && index+1 === response.series.length) {
         this.users.push({id_user:elementBack.id_user, nickname:elementBack.nickname, series:series});
       } else if (element.id_user !== elementBack.id_user && index+1 === response.series.length) {
+        this.users.push({id_user:elementBack.id_user, nickname:elementBack.nickname, series:series});
+        series=[];
         this.users.push({id_user:element.id_user, nickname:element.nickname, series:[
           {id_serie:element.id_serie, titulo:element.titulo, descripcion:element.descripcion, imgportada:element.imgportada}
         ]});
@@ -80,7 +82,7 @@ export class ScreenHomePage implements OnInit {
     formData.append('params','DELETE-SERIE');
     formData.append('data',JSON.stringify({id_serie:numberCard}));
     let { response } = await this.comBackend.requestBackend(formData);
-    if (true) {
+    if (response) {
       let art = this.mySeries.map(serie => { return serie.id_serie !== numberCard ? 0 : 1 }).findIndex(element => element === 1);
       this.mySeries.splice(art,1);
 

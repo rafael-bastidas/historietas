@@ -90,13 +90,23 @@ export class EditComicsPage implements OnInit {
   }
   async saveChanges(){
     console.log("Antes: ",this.fotogramas);
-    let data = this.id_serie === 0 ?
-      {"series":{titulo:this.title.value,descripcion:this.description.value},
-      "id_user":this.id_user} :
-      {"series":{id_serie:this.id_serie,titulo:this.title.value,descripcion:this.description.value},
-      "id_user":this.id_user,
-      "fotogramas":this.fotogramas,
-      "delete_fotograma[]":this.array_deleteFotograma};
+    let data;
+    if (this.id_serie === 0) {
+      data = {
+        "series":{titulo:this.title.value,descripcion:this.description.value},
+        "id_user":this.id_user};
+    } else if (this.id_serie !== 0) {
+      data = {
+        "series":{id_serie:this.id_serie,titulo:this.title.value,descripcion:this.description.value},
+        "id_user":this.id_user};
+      if (this.fotogramas.length>0) {
+        data = {
+          "series":{id_serie:this.id_serie,titulo:this.title.value,descripcion:this.description.value},
+          "id_user":this.id_user,
+          "fotogramas":this.fotogramas,
+          "delete_fotograma[]":this.array_deleteFotograma};
+      }
+    }
 
     if (this.title.valid && this.description.valid && this.url_local_imgportada.length === 1) {
       let formData = new FormData;
@@ -111,7 +121,7 @@ export class EditComicsPage implements OnInit {
       }
       let { response } = await this.comBackend.requestBackend(formData);
       this.id_serie === 0 ? (response.series > 0 ? this.id_serie=response.series : '') : '';
-      if (typeof response.fotogramas.insert !== null){
+      if (typeof response.fotogramas?.insert !== null){
         let item_Fotograma;
         response.fotogramas.insert.forEach(element => {
           item_Fotograma = this.fotogramas.find(item => item.number_fotograma==element.fotograma.number_fotograma);

@@ -1,9 +1,61 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>view-comics</ion-title>
+  <ion-toolbar style="--color: darkblue;">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title slot="end">Comics y Mangas</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
+  <section [style]="contraer_expandir.style">
+    <ion-slides [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }" (ionSlideDidChange)="cambiarSlide()">
+      <ion-slide *ngFor="let fotograma of fotogramas">
+        <ion-card style="margin: 0%;">
+          <ion-img [src]="fotograma.imagen"></ion-img>
+          <ion-card-content>
+            <ion-button size="small" color="primary">
+              1/90
+            </ion-button>
+            <ion-button (click)="contraerExpandir()" size="small" color="success">
+              <ion-icon slot="icon-only" [name]="contraer_expandir.iconname"></ion-icon>
+            </ion-button>
+            <ion-button size="small" color="danger">
+              <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+    </ion-slides>
+  </section>
+
+  <section *ngIf="contraer_expandir.flatcomentario">
+    <section style="margin-top: 15px;" *ngIf="nickName!=='Invitado'">
+      <ion-item>
+        <ion-label position="floating" color="primary">Escribir un comentario</ion-label>
+        <ion-textarea [formControl]="inputComentario"></ion-textarea>
+      </ion-item>
+      <ion-button (click)="uploadComentario()" size="small" expand="full" [disabled]="inputComentario.invalid">{{name_btn_comentar}}</ion-button>
+    </section>
+    <section>
+      <ion-card style="width: 90%;" *ngFor="let comentario of comentarios">
+        <ion-card-header>
+          <ion-card-title>@{{comentario.nickname}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          {{comentario.comentario}}
+        </ion-card-content>
+        <ion-card-content style="position: absolute; top: 0px; right: 0px;" *ngIf="comentario.id_user == id_user">
+          <ion-button (click)="editComentario(comentario)" size="small" color="success">
+            <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+          </ion-button>
+          <ion-button (click)="deleteComentario(comentario)" size="small" color="danger">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </section>
+  </section>
+  
 </ion-content>
