@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
 import { ConnectionBackendService } from '../services/connection-backend.service';
+import { ModalPagePage } from '../modal-page/modal-page.page';
+import { NotificationPushServiceService } from '../services/notification-push-service.service';
 
 @Component({
   selector: 'app-screen-home',
@@ -14,15 +17,17 @@ export class ScreenHomePage implements OnInit {
   mySeries:any = [{id_serie:0,titulo:'Nueva serie',descripcion:'',imgportada:''}];
   seriesFollow:any = [];
   users:any = [];
+  modal;
 
-  constructor(private router:Router, private route:ActivatedRoute, private comBackend:ConnectionBackendService) { }
+  constructor(private router:Router, private route:ActivatedRoute, private comBackend:ConnectionBackendService,
+    public modalController: ModalController, public fcm:NotificationPushServiceService) { }
 
-  ngOnInit() {
-  
-  }
-  ionViewWillEnter(){
+  ngOnInit() { }
+  async ionViewWillEnter(){
+    await this.presentModal();
     this.verificarProfile();
-    this.cargarSeries();
+    await this.cargarSeries();
+    this.modal.dismiss();
   }
   async cargarSeries(){
     this.initVariables();
@@ -103,6 +108,17 @@ export class ScreenHomePage implements OnInit {
       this.nickName = 'Invitado'
       this.id_user = '-1'
     }
+    this.id_user !== '-1' ? this.fcm.inicializar(this.id_user) : '';
+  }
+  async presentModal() {
+    this.modal = await this.modalController.create({
+      component: ModalPagePage,
+      componentProps: {
+        diametro: '150',
+        label:'Configurando...'
+      }
+    });
+    return await this.modal.present();
   }
 
 }

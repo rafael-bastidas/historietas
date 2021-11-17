@@ -7,21 +7,28 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen style="--background: rgba(0, 51, 153, 1);">
+
+  <ion-item style="padding: 0px; height: 0px; width: 0px;">
+    <ion-label>Seleccione</ion-label>
+    <ion-select id="selectorMultiple" [formControl]="selectMultiproposito">
+      <ion-select-option *ngFor="let option of optionsSelect" [value]="option.value">{{option.label}}</ion-select-option>
+    </ion-select>
+  </ion-item>
 
   <section [style]="contraer_expandir.style">
-    <ion-slides [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }" (ionSlideDidChange)="cambiarSlide()">
+    <ion-slides [options]="optionSlides" (ionSlideDidChange)="cambiarSlide()" style="height: 100%;">
       <ion-slide *ngFor="let fotograma of fotogramas">
         <ion-card style="margin: 0%;">
           <ion-img [src]="fotograma.imagen"></ion-img>
-          <ion-card-content>
-            <ion-button size="small" color="primary">
-              1/90
+          <ion-card-content style="padding-left: 0px; padding-right: opx;">
+            <ion-button (click)="configOptionsPage();" size="small" color="primary">
+              {{index_slides+1}}/{{fotogramas.length}}
             </ion-button>
             <ion-button (click)="contraerExpandir()" size="small" color="success">
               <ion-icon slot="icon-only" [name]="contraer_expandir.iconname"></ion-icon>
             </ion-button>
-            <ion-button size="small" color="danger">
+            <ion-button (click)="configOptionsOrientacion();" size="small" color="danger">
               <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
             </ion-button>
           </ion-card-content>
@@ -31,7 +38,7 @@
   </section>
 
   <section *ngIf="contraer_expandir.flatcomentario">
-    <section style="margin-top: 15px;" *ngIf="nickName!=='Invitado'">
+    <section style="margin-top: 15px; padding-left: 5px; padding-right:5px;" *ngIf="nickName!=='Invitado'">
       <ion-item>
         <ion-label position="floating" color="primary">Escribir un comentario</ion-label>
         <ion-textarea [formControl]="inputComentario"></ion-textarea>
@@ -39,7 +46,7 @@
       <ion-button (click)="uploadComentario()" size="small" expand="full" [disabled]="inputComentario.invalid">{{name_btn_comentar}}</ion-button>
     </section>
     <section>
-      <ion-card style="width: 90%;" *ngFor="let comentario of comentarios">
+      <ion-card style="width: 90%;" *ngFor="let comentario of comentariosall[index_slides]">
         <ion-card-header>
           <ion-card-title>@{{comentario.nickname}}</ion-card-title>
         </ion-card-header>

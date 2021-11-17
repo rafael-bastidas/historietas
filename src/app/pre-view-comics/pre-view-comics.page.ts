@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { ModalPagePage } from '../modal-page/modal-page.page';
 import { ConnectionBackendService } from '../services/connection-backend.service';
 
 @Component({
@@ -10,6 +12,7 @@ import { ConnectionBackendService } from '../services/connection-backend.service
 })
 export class PreViewComicsPage implements OnInit {
 
+  modal;
   selectEpisode:FormControl = new FormControl('', Validators.required);
   inputComentario:FormControl = new FormControl('', Validators.required);
   nickName:string = 'Invitado';
@@ -20,12 +23,15 @@ export class PreViewComicsPage implements OnInit {
   comentarios:Array<{id_comentarioserie:number, id_user:number, nickname:string, comentario:string}> = [{id_comentarioserie:1, id_user:1, nickname:"rarabala", comentario:"Hw"}];
   flatEditComment:{active:boolean,id:number} = {active:false,id:0};
 
-  constructor(private router:Router, private route:ActivatedRoute, private comBackend:ConnectionBackendService) { }
+  constructor(private router:Router, private route:ActivatedRoute, private comBackend:ConnectionBackendService,
+    public modalController: ModalController) { }
 
   ngOnInit() { }
-  ionViewWillEnter(){
+  async ionViewWillEnter(){
+    await this.presentModal('Cargando información...');
     this.verificarProfile();
-    this.cargarSeries();
+    await this.cargarSeries();
+    this.modal.dismiss();
   }
   verificarProfile(){
     if (localStorage.getItem('user')!==null){
@@ -104,6 +110,16 @@ export class PreViewComicsPage implements OnInit {
       let index_comment = this.comentarios.map(comentario => { return comentario.id_comentarioserie !== card.id_comentarioserie ? 0 : 1 }).findIndex(element => element === 1);
       this.comentarios.splice(index_comment, 1);
     } else {console.log("Error")}
+  }
+  async presentModal(label) {
+    this.modal = await this.modalController.create({
+      component: ModalPagePage,
+      componentProps: {
+        diametro: '150',
+        label:label
+      }
+    });
+    return await this.modal.present();
   }
 
   get param_id_serie() { return this.route.snapshot.queryParamMap.get('id_serie') };

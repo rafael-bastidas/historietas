@@ -94,4 +94,7 @@
     </ion-slides>
   </section>
 
+  <section style="margin-top: 10px;">
+    <button onclick="window.plugins.socialsharing.shareViaFacebook('Message via Facebook', null /* img */, null /* url */, function() {console.log('share ok')}, function(errormsg){alert(errormsg)})">msg via Facebook (with errcallback)</button>
+  </section>
 </ion-content>

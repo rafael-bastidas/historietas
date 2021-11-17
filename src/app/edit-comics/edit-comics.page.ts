@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { ModalPagePage } from '../modal-page/modal-page.page';
 import { ConnectionBackendService } from '../services/connection-backend.service';
 
 @Component({
@@ -26,13 +28,15 @@ export class EditComicsPage implements OnInit {
   number_asoc_fotograma_edit:number = 0;
 
   id_serie;
+  modal;
 
   array_deleteFotograma:Array<{id_fotograma:number,id_episodio:number}> = [];
 
-  constructor(private comBackend:ConnectionBackendService, private route:ActivatedRoute) { }
+  constructor(private comBackend:ConnectionBackendService, private route:ActivatedRoute,
+    public modalController: ModalController) { }
 
   ngOnInit() { }
-  ionViewWillEnter(){
+  async ionViewWillEnter(){
     this.id_serie = Number.parseInt(this.route.snapshot.queryParamMap.get('id_serie'));
     this.verificarProfile();
     this.id_serie !== 0 ? this.cargarInputs() : '';
@@ -60,6 +64,7 @@ export class EditComicsPage implements OnInit {
     console.log('ver',numberFotograma);
   }
   async saveEpisodes(numberEp:number){
+    this.presentModal('Sincronizando información...');
     let formData;
     //IF (NUEVO EPIZODIO) ELSE (EPISODIO EXISTENTE) 
     if (numberEp === 0 && this.id_serie !== 0){
@@ -87,8 +92,10 @@ export class EditComicsPage implements OnInit {
         this.url_local_imgfotogramas.push(item.imagen);
       });
     }
+    this.modal.dismiss();
   }
   async saveChanges(){
+    this.presentModal('Subiendo información...');
     console.log("Antes: ",this.fotogramas);
     let data;
     if (this.id_serie === 0) {
@@ -134,6 +141,7 @@ export class EditComicsPage implements OnInit {
       }
     } else { console.log('Todos los campos son obligatorios') }
     
+    this.modal.dismiss();
   }
   async onFileChange(event) {  
     if (event.target.files.length > 0) {
@@ -184,6 +192,7 @@ export class EditComicsPage implements OnInit {
   }
 
   async cargarInputs(){
+    this.presentModal('Configurando...');
     let formData = new FormData;
     formData.append('url','contenido');
     formData.append('params','GET-EDIT-INIT');
@@ -196,6 +205,7 @@ export class EditComicsPage implements OnInit {
 
     this.episodes = response.episodios;
 
+    this.modal.dismiss();
   }
   async getFileInfo(archivos,mal?):Promise<Array<any>> {
     return new Promise(resolve =>{
@@ -265,6 +275,16 @@ export class EditComicsPage implements OnInit {
       resolve(array_fotos);
 
     });
+  }
+  async presentModal(label) {
+    this.modal = await this.modalController.create({
+      component: ModalPagePage,
+      componentProps: {
+        diametro: '150',
+        label:label
+      }
+    });
+    return await this.modal.present();
   }
 
 }

@@ -21,6 +21,10 @@ const routes: Routes = [
   {
     path: 'pre-view-comics',
     loadChildren: () => import('./pre-view-comics/pre-view-comics.module').then( m => m.PreViewComicsPageModule)
+  },
+  {
+    path: 'modal-page',
+    loadChildren: () => import('./modal-page/modal-page.module').then( m => m.ModalPagePageModule)
   }
 ];
 @NgModule({

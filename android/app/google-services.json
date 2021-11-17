@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "864451250118",
+    "project_id": "lector-de-manga",
+    "storage_bucket": "lector-de-manga.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:864451250118:android:0d0554d9ed5cd5bffa14c7",
+        "android_client_info": {
+          "package_name": "com.rafaelcarrizalez.lectordemanga"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "864451250118-47m64o7ed6inf8qqsagv7pqpqk2ofpj5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZN6we1j84EGwAxdLj76GgxM-n09pHOoQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "864451250118-47m64o7ed6inf8qqsagv7pqpqk2ofpj5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
