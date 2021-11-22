@@ -4,6 +4,9 @@ import { ModalController } from '@ionic/angular';
 import { ConnectionBackendService } from '../services/connection-backend.service';
 import { ModalPagePage } from '../modal-page/modal-page.page';
 import { NotificationPushServiceService } from '../services/notification-push-service.service';
+//import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+
+declare let window:any;
 
 @Component({
   selector: 'app-screen-home',
@@ -19,7 +22,7 @@ export class ScreenHomePage implements OnInit {
   users:any = [];
   modal;
 
-  constructor(private router:Router, private route:ActivatedRoute, private comBackend:ConnectionBackendService,
+  constructor(private router:Router, private comBackend:ConnectionBackendService,
     public modalController: ModalController, public fcm:NotificationPushServiceService) { }
 
   ngOnInit() { }
@@ -89,7 +92,7 @@ export class ScreenHomePage implements OnInit {
     let { response } = await this.comBackend.requestBackend(formData);
     if (response) {
       let art = this.mySeries.map(serie => { return serie.id_serie !== numberCard ? 0 : 1 }).findIndex(element => element === 1);
-      this.mySeries.splice(art,1);
+      art !== -1 ? this.mySeries.splice(art,1) : console.log('Admin, no esta en tus series');
 
       let index_series;
       let index_users = this.users.map(user => {

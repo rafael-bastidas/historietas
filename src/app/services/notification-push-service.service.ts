@@ -7,13 +7,14 @@ import {
   PushNotifications,
   Token,
 } from '@capacitor/push-notifications';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationPushServiceService {
 
-  constructor(public platform:Platform) {
+  constructor(public platform:Platform, private router:Router) {
 
   }
 
@@ -61,21 +62,22 @@ export class NotificationPushServiceService {
       // Some issue with our setup and push will not work
       PushNotifications.addListener('registrationError',
         (error: any) => {
-          alert('Error on registration: ' + JSON.stringify(error));
+          //alert('Error on registration: ' + JSON.stringify(error));
         }
       );
 
       // Show us the notification payload if the app is open on our device
       PushNotifications.addListener('pushNotificationReceived',
         (notification: PushNotificationSchema) => {
-          alert('Push received: ' + JSON.stringify(notification));
+          //alert('Push received: ' + JSON.stringify(notification));
+          this.router.navigate(['/pre-view-comics'], {queryParams: {id_serie: notification.data.id_serie}})
         }
       );
 
       // Method called when tapping on a notification
       PushNotifications.addListener('pushNotificationActionPerformed',
         (notification: ActionPerformed) => {
-          alert('Push action performed: ' + JSON.stringify(notification));
+          //alert('Push action performed: ' + JSON.stringify(notification));
         }
       );
     } else { console.log("no es un movil") }

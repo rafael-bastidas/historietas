@@ -62,11 +62,7 @@
           </ion-card-subtitle>
         </ion-card-header>
       </ion-card>
-      <!-- Codigo anterior
-      <ion-col (click)="verSerie(serieFollow.id)" style="background: white; padding: 0px; height: 100%;">
-        <ion-img style="pointer-events:none" [src]="serieFollow.url"></ion-img>
-        <ion-label color="primary">{{ serieFollow.title }}</ion-label>
-      </ion-col>-->
+
     </ion-slide>
   </ion-slides>
 
@@ -77,7 +73,7 @@
     <ion-slides [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }">
       <ion-slide *ngFor="let serie of user.series" style="width: 250px; height: auto; margin-left: 5px; cursor: pointer;">
         
-        <ion-card (click)="verSerie(serie.id_serie)" style="height: 100%; width: 100%;">
+        <ion-card (click)="verSerie(serie.id_serie)" style="height: 100%; width: 100%;" *ngIf="nickName!=='admin'">
           <img [src]="serie.imgportada"/>
           <ion-card-header class="contenedor-puntillos">
             <ion-card-subtitle class="puntillos" color="primary" style="white-space:nowrap;">
@@ -85,16 +81,28 @@
             </ion-card-subtitle>
           </ion-card-header>
         </ion-card>
-        <!-- Codigo Anterior
-        <ion-col (click)="verSerie(serie.id)" style="background: white; padding: 0px; height: 100%;">
-          <ion-img style="pointer-events:none" [src]="serie.url"></ion-img>
-          <ion-label color="primary">{{ serie.title }}</ion-label>
-        </ion-col>-->
+        <ion-card style="height: 100%; width: 100%;" *ngIf="nickName==='admin'">
+          <img [src]="serie.imgportada"/>
+          <ion-card-header class="contenedor-puntillos">
+            <ion-card-subtitle class="puntillos" color="primary" style="white-space:nowrap;">
+              {{ serie.titulo }}
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content style="position: absolute; top: 0px; right: 0px;">
+            <ion-button (click)="verSerie(serie.id_serie)" size="small" color="primary">
+              <ion-icon slot="icon-only" name="eye-outline"></ion-icon>
+            </ion-button>
+            <ion-button (click)="editSerie(serie.id_serie)" size="small" color="success">
+              <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+            </ion-button>
+            <ion-button (click)="deleteSerie(serie.id_serie)" size="small" color="danger">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+
       </ion-slide>
     </ion-slides>
   </section>
 
-  <section style="margin-top: 10px;">
-    <button onclick="window.plugins.socialsharing.shareViaFacebook('Message via Facebook', null /* img */, null /* url */, function() {console.log('share ok')}, function(errormsg){alert(errormsg)})">msg via Facebook (with errcallback)</button>
-  </section>
 </ion-content>

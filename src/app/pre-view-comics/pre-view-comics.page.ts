@@ -64,7 +64,7 @@ export class PreViewComicsPage implements OnInit {
   async verEpisodio(){
     console.log("Ver episodio: ", this.selectEpisode.value);
 
-    this.router.navigate(['/view-comics'],{queryParams:{id_episodio:this.selectEpisode.value}})
+    this.router.navigate(['/view-comics'],{queryParams:{id_episodio:this.selectEpisode.value,url_shared:this.serie.imgportada}})
   }
   async uploadComentario(){
     let params = "INSERT-COMENTARIOSERIE";
@@ -72,7 +72,7 @@ export class PreViewComicsPage implements OnInit {
 
     if (this.flatEditComment.active) {
       params = "UPDATE-COMENTARIOSERIE";
-      data = {id_comentarioserie:this.flatEditComment.id, id_serie:this.param_id_serie,id_user:Number.parseInt(this.id_user),comentario:this.inputComentario.value};
+      data = {id_comentarioserie:this.flatEditComment.id,comentario:this.inputComentario.value}; //id_serie:this.param_id_serie,id_user:Number.parseInt(this.id_user) no es necesario actualizar
     }
 
     let formData = new FormData;
